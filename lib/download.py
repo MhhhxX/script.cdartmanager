@@ -13,7 +13,7 @@ import cdam_fs
 import cdam_utils as cu
 import ftv_scraper
 
-from cdam_utils import log, dialog_msg
+from cdam_utils import log, dialog_msg, __progress_dialog_bg
 from cdam import ArtType, FileName
 from cdam_fs import sanitize
 
@@ -192,6 +192,7 @@ def auto_download(type_, artist_list, background=False):
                     and artist["has_art"]:
                 dialog_msg("update",
                            percent=percent,
+                           heading=type_,
                            line1="%s%s" % (__lng__(32038), cu.get_unicode(artist["name"])),
                            background=background)
 
@@ -315,6 +316,7 @@ def auto_download(type_, artist_list, background=False):
                     if not album["musicbrainz_albumid"]:
                         continue
                     dialog_msg("update", percent=percent,
+                               heading=type_,
                                line1="%s%s" % (__lng__(32038), cu.get_unicode(artist["name"])),
                                line2="%s%s" % (__lng__(32039), cu.get_unicode(album["title"])),
                                background=background)

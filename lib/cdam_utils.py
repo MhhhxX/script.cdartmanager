@@ -20,6 +20,7 @@ __cfg__ = cdam.Settings()
 __lng__ = __cdam__.getLocalizedString
 
 dialog = xbmcgui.DialogProgress()
+pDialogBG = xbmcgui.DialogProgressBG()
 
 
 def change_characters(text):
@@ -267,13 +268,32 @@ def dialog_msg(action,
         if action == 'yesno':
             return xbmcgui.Dialog().yesno(heading, line1, line2, line3, nolabel, yeslabel)
     if background:
-        if action == 'create' or action == 'okdialog':
-            if line2 == '':
-                msg = line1
-            else:
-                msg = line1 + ': ' + line2
+        if line2 == '':
+            msg = line1
+        else:
+            msg = line1 + ': ' + line2
+        if action == 'okdialog':
             if __cfg__.notify_in_background():
                 xbmc.executebuiltin("XBMC.Notification(%s, %s, 7500, %s)" % (heading, msg, __cdam__.file_icon()))
+        if action == 'create':
+            __progress_dialog_bg(action, heading=heading, msg=msg)
+        if action == 'update':
+            __progress_dialog_bg(action, percent=percent, heading=heading, msg=msg)
+        if action == 'close':
+            __progress_dialog_bg(action)
+
+
+def __progress_dialog_bg(action, percent=0, heading='', msg=''):
+    if action == 'create':
+        pDialogBG.create(heading, msg)
+    if action == 'update':
+        if percent > 100:
+            percent = 100
+        if percent < 0:
+            percent = 0
+        pDialogBG.update(percent, heading, msg)
+    if action == 'close':
+        pDialogBG.close()
 
 
 def log(text, severity=xbmc.LOGDEBUG):
